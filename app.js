@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 // Home and health route
 app.get("/", (req, res) => {
-  res.send("Hello BitCraft");
+  res.send("Task Management App");
 });
 // health
 app.get("/health", (req, res) => {

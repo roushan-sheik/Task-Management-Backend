@@ -47,7 +47,26 @@ async function run() {
     // ==========================> coupon related related  route implementation <=============================
     // coupon related
     const userCollection = client.db("task-management").collection("users");
-    // create user
+
+    // create  user route added
+    app.post("/users/post", async (req, res) => {
+      const newUser = req.body;
+      // Check if user already exists based on email
+      const existingUser = await userCollection.findOne({
+        email: newUser.email,
+      });
+
+      console.log(existingUser);
+      if (existingUser) {
+        // User already exists, send an appropriate response
+        return res
+          .status(400)
+          .json({ message: "User with this email already exists" });
+      }
+      // Insert the new user if not already existing
+      const result = await userCollection.insertOne(newUser);
+      res.status(201).send(result);
+    });
 
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================

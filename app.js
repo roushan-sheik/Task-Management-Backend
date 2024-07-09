@@ -97,6 +97,36 @@ async function run() {
       const result = await taskCollection.updateOne(query, data, options);
       res.send(result);
     });
+    // Endpoint to push a new user ID to the assignedTo array of a task
+    app.patch("/give/task/:id", async (req, res) => {
+      const taskId = req.params.id;
+      const userId = req.body.assignedTo; // assuming req.body contains { "assignedTo": "newUserId" }
+
+      try {
+        // Update the task by adding the new user ID to the assignedTo array only if it doesn't already exist
+        const result = await taskCollection.updateOne(
+          { _id: new ObjectId(taskId) },
+          { $addToSet: { assignedTo: userId } }
+        );
+
+        if (result.matchedCount === 0) {
+          return res.status(404).json({ message: "Task not found" });
+        }
+
+        if (result.modifiedCount === 0) {
+          return res
+            .status(400)
+            .json({ message: "User already assigned to task" });
+        }
+
+        res.status(200).json({ message: "User assigned to task successfully" });
+      } catch (error) {
+        console.error("Error assigning user to task:", error);
+        res.status(500).json({ error: "Failed to assign user to task" });
+      }
+    });
+
+    // get single task
     app.get("/tasks/:id", async (req, res) => {
       const userId = req.params.id;
       try {

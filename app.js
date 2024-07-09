@@ -61,6 +61,19 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    // Update Task Status
+ 
+    app.put("/status/:id", async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const options = { upsert: true };
+      const data = {
+        $set: {
+          status: req.body.status,
+        },
+      };
+      const result = await taskCollection.updateOne(query, data, options);
+      res.send(result);
+    });
     // User api Route ============================================
     // create  user route added
     app.post("/users/post", async (req, res) => {

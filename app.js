@@ -81,6 +81,22 @@ async function run() {
       });
       res.send(result);
     });
+    // update task route
+    app.put("/task/:id", async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const options = { upsert: true };
+      const data = {
+        $set: {
+          title: req.body.title,
+          image: req.body.image,
+          description: req.body.description,
+          status: req.body.status,
+          assignedTo: req.body.assignedTo,
+        },
+      };
+      const result = await taskCollection.updateOne(query, data, options);
+      res.send(result);
+    });
     app.get("/tasks/:id", async (req, res) => {
       const userId = req.params.id;
       try {

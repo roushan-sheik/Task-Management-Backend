@@ -114,7 +114,7 @@ async function run() {
       if (existingUser) {
         // User already exists, send an appropriate response
         return res
-          .status(400)
+          .status(200)
           .json({ message: "User with this email already exists" });
       }
       // Insert the new user if not already existing

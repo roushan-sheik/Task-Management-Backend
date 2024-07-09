@@ -45,9 +45,17 @@ async function run() {
     // ==========================> coupon related related  route implementation <=============================
     // ==========================> coupon related related  route implementation <=============================
     // ==========================> coupon related related  route implementation <=============================
-    // coupon related
+    //* All collections
     const userCollection = client.db("task-management").collection("users");
-
+    const taskCollection = client.db("task-management").collection("tasks");
+    // Task api Route ============================================
+    // create  task route
+    app.post("/task", async (req, res) => {
+      const task = req.body;
+      const result = await taskCollection.insertOne(task);
+      res.send(result);
+    });
+    // User api Route ============================================
     // create  user route added
     app.post("/users/post", async (req, res) => {
       const newUser = req.body;

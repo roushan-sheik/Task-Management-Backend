@@ -81,6 +81,26 @@ async function run() {
       });
       res.send(result);
     });
+    app.get("/tasks/:id", async (req, res) => {
+      const userId = req.params.id;
+      try {
+        // Fetch all tasks from the collection
+        const allTasks = await taskCollection.find().toArray();
+
+        // Filter tasks assigned to the specific user
+        const userTasks = allTasks.filter((task) =>
+          task.assignedTo.includes(userId)
+        );
+
+        // Send the filtered tasks as the response
+        res.status(200).json(userTasks);
+      } catch (error) {
+        // Handle errors
+        console.error("Error fetching user tasks:", error);
+        res.status(500).json({ error: "Failed to fetch user tasks" });
+      }
+    });
+
     // User api Route ============================================
     // create  user route added
     app.post("/users/post", async (req, res) => {
@@ -163,6 +183,7 @@ async function run() {
       });
       res.send(result);
     });
+
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================

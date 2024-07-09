@@ -55,6 +55,12 @@ async function run() {
       const result = await taskCollection.insertOne(task);
       res.send(result);
     });
+    // get all tasks
+    app.get("/tasks", async (req, res) => {
+      const cursor = taskCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     // User api Route ============================================
     // create  user route added
     app.post("/users/post", async (req, res) => {
@@ -129,6 +135,13 @@ async function run() {
         console.error("Error updating user role:", error);
         res.status(500).send({ message: "Internal Server Error" });
       }
+    });
+    // delete user
+    app.delete("/user/:id", async (req, res) => {
+      const result = await userCollection.deleteOne({
+        _id: new ObjectId(req.params.id),
+      });
+      res.send(result);
     });
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================

@@ -81,6 +81,41 @@ async function run() {
       });
       res.send({ role: user.role });
     });
+    // Update user role
+    app.put("/update/user/role/:email", async (req, res) => {
+      try {
+        const email = req.params.email;
+        const newRole = req.body.role;
+
+        // Ensure the new role is provided
+        if (!newRole) {
+          return res.status(400).send({ message: "Role is required" });
+        }
+        // Create the query object to find the user by email
+        const query = { email: email };
+
+        // Create the update object to set the new role
+        const update = {
+          $set: {
+            role: newRole,
+          },
+        };
+
+        // Perform the update operation on the user collection
+        const result = await userCollection.updateOne(query, update);
+
+        // Check if the update was successful
+        if (result.matchedCount > 0) {
+          res.status(200).send({ message: "User role updated successfully" });
+        } else {
+          res.status(404).send({ message: "User not found" });
+        }
+      } catch (error) {
+        // Handle any errors that occur during the operation
+        console.error("Error updating user role:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+      }
+    });
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================

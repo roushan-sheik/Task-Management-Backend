@@ -67,7 +67,20 @@ async function run() {
       const result = await userCollection.insertOne(newUser);
       res.status(201).send(result);
     });
-
+    // get single user
+    app.get("/users/details/:email", async (req, res) => {
+      const result = await userCollection.findOne({
+        email: req.params.email,
+      });
+      res.send(result);
+    });
+    // get user role
+    app.get("/user/role/:email", async (req, res) => {
+      const user = await userCollection.findOne({
+        email: req.params.email,
+      });
+      res.send({ role: user.role });
+    });
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================
     // ========================<<<<<<<< End >>>>>>>>>>>>>>>>==========================

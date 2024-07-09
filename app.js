@@ -62,7 +62,7 @@ async function run() {
       res.send(result);
     });
     // Update Task Status
- 
+
     app.put("/status/:id", async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
       const options = { upsert: true };
@@ -72,6 +72,13 @@ async function run() {
         },
       };
       const result = await taskCollection.updateOne(query, data, options);
+      res.send(result);
+    });
+    // delete task post
+    app.delete("/task/:id", async (req, res) => {
+      const result = await taskCollection.deleteOne({
+        _id: new ObjectId(req.params.id),
+      });
       res.send(result);
     });
     // User api Route ============================================

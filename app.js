@@ -67,6 +67,12 @@ async function run() {
       const result = await userCollection.insertOne(newUser);
       res.status(201).send(result);
     });
+    // get all users
+    app.get("/users", async (req, res) => {
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     // get single user
     app.get("/users/details/:email", async (req, res) => {
       const result = await userCollection.findOne({

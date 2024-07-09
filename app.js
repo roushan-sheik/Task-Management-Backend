@@ -9,7 +9,7 @@ const app = express();
 //middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://bit-craft-e7008.web.app"],
+    origin: ["http://localhost:5173", "https://task-management-faf4c.web.app/"],
     credentials: true,
     optionsSuccessStatus: 200,
   })
